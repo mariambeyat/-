@@ -1,0 +1,91 @@
+import React, { useState } from "react";
+import "./App.css"; // تأكد من إضافة تنسيقاتك هنا
+
+const App = () => {
+  const [date, setDate] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleCalculate = () => {
+    if (!date) {
+      setResult("يرجى إدخال تاريخ صحيح.");
+      return;
+    }
+
+    const inputDate = new Date(date);
+    const day = inputDate.getDate();
+    const month = inputDate.getMonth() + 1;
+
+    // قائمة مواسم وأبراج ومعلومات مشابهة (مثال بسيط)
+    const data = [
+      { start: "12-21", end: "3-20", season: "الشتاء", zodiac: "الجدي" },
+      { start: "3-21", end: "6-20", season: "الربيع", zodiac: "الحمل" },
+      { start: "6-21", end: "9-22", season: "الصيف", zodiac: "السرطان" },
+      { start: "9-23", end: "12-20", season: "الخريف", zodiac: "الميزان" },
+    ];
+
+    // تحديد الموسم والبرج بناءً على التاريخ المدخل
+    const formattedDate = `${month}-${day}`;
+    const match = data.find(
+      (entry) =>
+        (formattedDate >= entry.start && formattedDate <= entry.end) ||
+        (entry.start > entry.end &&
+          (formattedDate >= entry.start || formattedDate <= entry.end))
+    );
+
+    if (match) {
+      setResult(
+        `الموسم: ${match.season} | البرج المرتبط: ${match.zodiac}`
+      );
+    } else {
+      setResult("تعذر تحديد المعلومات بناءً على التاريخ.");
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1>حاسبة المواسم والأبراج</h1>
+      <p>أدخل التاريخ لمعرفة الموسم والبرج:</p>
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+      <button onClick={handleCalculate}>احسب</button>
+      {result && <p className="result">{result}</p>}
+    </div>
+  );
+};
+
+export default App;
+
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+input[type="date"] {
+  margin: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
